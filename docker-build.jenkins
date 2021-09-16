@@ -12,24 +12,22 @@ pipeline {
    #     timestamps()
    # }
     stages {
-        stage("docker login") {
+   #     stage("docker login") {
+   #           withCredentials([usernamePassword(credentialsId: 'dockerhub_semaev', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+   #                 sh """
+   #                 docker login -u $USERNAME -p $PASSWORD
+   #                 """
+   #             }
+   #         }
+   #     }
+        stage("create docker image") {
             steps {
-                echo " ============== docker login =================="
-                withCredentials([usernamePassword(credentialsId: 'dockerhub_semaev', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    sh """
-                    docker login -u $USERNAME -p $PASSWORD
-                    """
+                echo " ============== start building image =================="
+                dir ('github.com/Sewer01/django.git') {
+                	sh 'docker build -t sewer01/django:jenkins . '
                 }
             }
         }
-    #    stage("create docker image") {
-    #        steps {
-    #            echo " ============== start building image =================="
-    #            dir ('docker/toolbox') {
-    #            	sh 'docker build -t semaev/toolbox:latest . '
-    #            }
-    #        }
-    #    }
     #    stage("docker push") {
     #        steps {
     #            echo " ============== start pushing image =================="
